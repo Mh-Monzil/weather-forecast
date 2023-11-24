@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url(images/bg-image.jpg) no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form class="col-md-6 m-auto py-5">
+            <div class="input-group mb-3">
+                <input id="input" type="text" class="form-control p-4" placeholder="Enter a location for Weather ...">
+                <div class="input-group-append">
+                    <button id="search" type="button" class="btn btn-danger">Search</button>
+                </div>
+            </div>
+        </form>
+        <div class="weather-status text-white text-center">
+            <img id="img" src="" alt="">
+            <h1 id="city">City</h1>
+            <h3><span id="temp">0</span>&deg;C</h3>
+            <h1 class="lead"></h1>
+        </div>
+    </div>
+
+    <script>
+        const apiKey = "c78ef580b937224502ca367a8076090d";
+        const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+
+        function checkWeather(city){
+            fetch(apiUrl + city + `&appid=${apiKey}`)
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+
+                document.getElementById("city").innerText = data.name;
+                document.getElementById("temp").innerText = data.main.temp;
+                const image = document.getElementById("img");
+
+                if(data.weather[0].main == "Clouds"){
+                    image.src = "https://openweathermap.org/img/wn/02d@2x.png"
+                }
+                else if(data.weather[0].main == "Clear"){
+                    image.src = "https://openweathermap.org/img/wn/01d@2x.png"
+                }
+                else if(data.weather[0].main == "Rain"){
+                    image.src = "https://openweathermap.org/img/wn/10d@2x.png"
+                }
+                else if(data.weather[0].main == "Snow"){
+                    image.src = "https://openweathermap.org/img/wn/13d@2x.png"
+                }
+                else if(data.weather[0].main == "Haze"){
+                    image.src = "https://openweathermap.org/img/wn/50d@2x.png"
+                }
+
+                document.getElementById("input").value = "";
+            })
+        }
+        
+
+        let input = document.getElementById("input");
+        const search = document.getElementById("search");
+        search.addEventListener("click", () => {
+            checkWeather(input.value);
+        })
+    </script>
+
+</body>
+
+</html>
